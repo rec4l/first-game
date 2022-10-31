@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<body>
+<button type="button" id="main" onclick="showShopTab()">Shop Tab</button>
+<button type="button" id="main" onclick="showAscendTab()">Ascension Tab</button>
+<button type="button" id="main" onclick="showAscendShopTab()">Ascension Shop</button>
+<p id="displayCurrency">Number: 0</p>
+<p id="displayAscendCurrency">Ascension Coins: 0</p>
+
+<button type="button" id="main" onclick="incrementNumber()">Increment Button</button> 
+<br>
+
+<!-- Shop tab -->
+<button type="button" id="shop" onclick="shop1()">Buy 2x multiplier for 20</button>
+
+<!-- Ascend tab -->
+<button type="button" id="ascend" onclick="ascend1()">Ascend</button>
+
+<!-- Ascend shop tab -->
+<button type="button" id="ascendShop" onclick="ascendShop1()">2x boost gained from Ascension Coins, costs 100 AC</button>
+
+<script>
+shopEnabled = false;
+
+number = 10000;
+// number = 0;
+ascendCurrency = 0;
+
+additive = 1;
+ascendMultiplier = 0.1;
+
+cost1 = 20;
+ascendCost1 = 100;
+
+
+// updates constants every 50ms
+setInterval(incrementNumber, 10);
+// setInterval(incrementNumber, 1000);
+setInterval(updateNumber, 50);
+hideOtherTabs();
+
+// updates all constants 
+function updateNumber() {
+    document.getElementById("displayCurrency").innerHTML = "Currency: " + Math.round(number);
+    document.getElementById("displayAscendCurrency").innerHTML = "Ascension Coins: " + ascendCurrency;
+}
+
+
+function incrementNumber() {
+    number += additive * (Math.round(100 + ascendCurrency * ascendMultiplier))/100
+}
+
+function shop1() {
+    if (number > cost1) {
+        number -= cost1;
+        additive *= 2;
+        cost1 *= 2;
+        document.getElementById("shop").innerHTML = "2x multiplier for " + cost1;
+    } else {
+        alert("You do not have enough currency! Needed " + cost1);
+    }
+}
+
+function ascendShop1() {
+    if (ascendCurrency > ascendCost1) {
+        ascendCurrency -= ascendCost1;
+        ascendMultiplier *= 2;
+    } else {
+        alert("You do not have enough currency! Needed " + ascendCost1);
+    }
+}
+
+function ascend1() {
+    preAscendCurrency = 0;
+    if (number < 1000) {
+        alert('You may not ascend yet! You need at least 1000 currency.');
+    } else if (number > 1000) {
+        preAscendCurrency = Math.round(number ** (0.5));
+        ascendCheck = confirm('Do you want to ascend? You will receive ' + preAscendCurrency + 'ascension coins, which will convert to a ' + Math.round(100 + preAscendCurrency * ascendMultiplier) + '% boost.')
+        if (ascendCheck == true) {
+            number = 0;
+            ascendCurrency += preAscendCurrency;
+            additive = 1;
+        }
+    }
+}
+
+function resetPostAscension(){
+    number = 0;
+    additive = 1;
+    cost1 = 20;
+}
+
+//shows shop if hidden and hides shop if visible
+function showShopTab() {
+    hideOtherTabs();
+    shop = document.getElementById("shop");
+    if (shop.style.display === "none") {
+        shop.style.display = "block";
+    }
+}
+
+function showAscendTab() {
+    hideOtherTabs();
+    ascend = document.getElementById("ascend");
+    if (ascend.style.display === "none") {
+        ascend.style.display = "block";
+    }
+}
+
+function showAscendShopTab() {
+    hideOtherTabs();
+    ascendShop = document.getElementById("ascendShop");
+    if (ascendShop.style.display === "none") {
+        ascendShop.style.display = "block";
+    }
+}
+
+
+function hideOtherTabs() {
+    shop = document.getElementById("shop");
+    ascend = document.getElementById("ascend");
+    ascendShop = document.getElementById("ascendShop");
+
+    shop.style.display = "none";
+    ascend.style.display = "none";
+    ascendShop.style.display = "none";
+
+}
+
+
+
+
+
+</script>
+
+</body>
+</html>
